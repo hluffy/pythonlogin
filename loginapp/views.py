@@ -44,3 +44,41 @@ def cache(request):
     ctime = time.time()
     return render(request,'cache.html',{'ctime':ctime})
 
+
+
+
+
+# form表单验证
+from django import forms
+from django.forms import widgets,fields
+class FM(forms.Form):
+    username = fields.CharField(
+        widget = widgets.Textarea(attrs={'class':'c1'}),
+        error_messages={'required':'用户名不能为空。'}
+    )
+    pwd = fields.CharField(
+        widget = widgets.PasswordInput,
+        min_length=6,
+        max_length=12,
+        error_messages={'required':'密码不能为空。','min_length':'密码长度最短为6','max_length':'密码最长为12'}
+    )
+    email = fields.EmailField(error_messages={'required':'邮箱不能为空。','invalid':'邮箱格式错误'})
+
+def fm(request):
+    if request.method == 'GET':
+        obj = FM()
+        return render(request, 'fm.html',{'obj':obj})
+
+    elif request.method == 'POST':
+        obj = FM(request.POST)
+        if obj.is_valid():
+            print(obj.cleaned_data)
+            return render(request, 'fm.html')
+            pass
+        else:
+            print(obj.errors.as_json())
+            # print(obj.errors)
+            return render(request, 'fm.html',{'obj':obj})
+            pass
+        return render(request, 'fm.html')
+
