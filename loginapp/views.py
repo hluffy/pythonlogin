@@ -32,3 +32,15 @@ def index(request):
 def logout(request):
     request.session.clear()
     return redirect('/login/')
+
+
+
+
+from django.views.decorators.cache import cache_page
+
+# @cache_page(10)
+def cache(request):
+    import time
+    ctime = time.time()
+    return render(request,'cache.html',{'ctime':ctime})
+
