@@ -6,12 +6,40 @@
 </head>
 <body>
     <h1>登录</h1>
-    <form action="/login" method="POST">
+    <form action="/login/" method="POST">
         <div>
+            {% csrf_token %}
             <input type="text" name="username">
             <input type="text" name="password">
             <input type="submit" value="登录">
+
         </div>
     </form>
+
+    <button id="mybut">按钮</button>
+
+    <script src="/static/jquery-3.2.1.min.js"></script>
+    <script src="/static/jquery.cookie.js"></script>
+    <script>
+        $(function(){
+            $.ajaxSetup({
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'))
+                }
+            })
+
+            $('#mybut').click(function(){
+                $.ajax({
+                    url:'/login/',
+                    type:'post',
+                    data:{'username':'root','password':'root'},
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success:function(data){
+                        console.log(data)
+                    }
+                })
+            })
+        });
+    </script>
 </body>
 </html>
