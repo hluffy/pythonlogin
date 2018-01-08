@@ -82,3 +82,21 @@ def fm(request):
             pass
         return render(request, 'fm.html')
 
+
+
+# 文件上传
+def uploadfile(request):
+    if request.method == "GET":
+        return render(request, 'uploadfile.html')
+
+    elif request.method == 'POST':
+        import os
+        obj = request.FILES.get('myfile')
+        print(obj.name)
+        file_path = os.path.join('upload',obj.name)
+        f = open(file_path,'wb')
+        for i in obj.chunks():
+            f.write(i)
+        f.close()
+        return HttpResponse('ok')
+    pass
